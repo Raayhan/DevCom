@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from .models import Room
 rooms = [
     {'id':1, 'name':'Python Crash Course'},
     {'id':2, 'name':'React Font to Back'},
