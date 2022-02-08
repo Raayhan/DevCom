@@ -14,7 +14,7 @@ def loginPage(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method =='POST':
-        username= request.POST.get('username')
+        username= request.POST.get('username').lower()
         password= request.POST.get('password')
         try:
             user = User.objects.get(username=username)
@@ -37,6 +37,18 @@ def logoutUser(request):
 def registerPage(request):
     page='register'
     form= UserCreationForm()
+    
+    if request.method == 'POST':
+        form= UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request,'An error occured during registration.')
+
     context={'page': page,'form':form}
     return render(request,'base/login_register.html',context)
 
