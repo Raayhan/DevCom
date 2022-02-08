@@ -9,6 +9,8 @@ from .models import Room, Topic
 from .forms import RoomForm
 
 def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method =='POST':
         username= request.POST.get('username')
         password= request.POST.get('password')
@@ -79,7 +81,7 @@ def updateRoom(request,pk):
 @login_required(login_url='/login')
 def deleteRoom(request,pk):
     room=Room.objects.get(id=pk)
-    
+
     if request.user != room.host:
         return HttpResponse('Access Forbidden')
     if request.method=='POST':
