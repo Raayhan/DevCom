@@ -9,6 +9,7 @@ from .models import Room, Topic
 from .forms import RoomForm
 
 def loginPage(request):
+    page='login'
     if request.user.is_authenticated:
         return redirect('home')
     if request.method =='POST':
@@ -25,13 +26,18 @@ def loginPage(request):
         else:
             messages.error(request,'Invalid Credentials')
 
-    context={}
+    context={'page': page}
     return render(request,'base/login_register.html',context)
 
 def logoutUser(request):
     logout(request)
     return redirect('home')
 
+def registerPage(request):
+    page='register'
+    context={'page': page}
+    return render(request,'base/login_register.html',context)
+    
 def home(request):
     q        = request.GET.get('q') if request.GET.get('q') != None else ''
     rooms    = Room.objects.filter(
